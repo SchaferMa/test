@@ -102,4 +102,13 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
+    @ApiOperation("启用 禁用")
+    @PostMapping("/status/{status}")
+    public Result state(@PathVariable Integer status ,Long id){
+        //调用service修改
+        employeeService.state(status,id);
+        return Result.success();
+    }
+
+
 }

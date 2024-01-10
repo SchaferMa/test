@@ -20,4 +20,5 @@ public interface EmployeeService {
 
     PageResult pagingQuery(EmployeePageQueryDTO employeePageQueryDTO);
 
+    void state(Integer status, Long id);
 }

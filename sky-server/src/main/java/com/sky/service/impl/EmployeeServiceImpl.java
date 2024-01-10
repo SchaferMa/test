@@ -108,4 +108,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         Page<Employee> page = employeeMapper.selectPage(employeePage, new LambdaQueryWrapper<>());
         return new PageResult(page.getTotal(), page.getRecords());
     }
+
+    /**
+     * 启用禁用
+     * @param status
+     * @param id
+     */
+    @Override
+    public void state(Integer status, Long id) {
+        Employee employee = Employee.builder().status(status).id(id).build();
+        employeeMapper.updateById(employee);
+    }
 }
