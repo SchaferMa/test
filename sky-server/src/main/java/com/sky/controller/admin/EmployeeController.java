@@ -102,6 +102,12 @@ public class EmployeeController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 启用禁用
+     * @param status
+     * @param id
+     * @return
+     */
     @ApiOperation("启用 禁用")
     @PostMapping("/status/{status}")
     public Result state(@PathVariable Integer status ,Long id){
@@ -110,5 +116,29 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 根据id查询员工
+     * @param id
+     * @return
+     */
+    @ApiOperation("根据id查询员工")
+    @GetMapping("/{id}")
+    public Result<Employee> query(@PathVariable long id){
+        //调用service
+        Employee  employee = employeeService.query(id);
+        return Result.success(employee);
+    }
+
+    /**
+     * 编辑员工信息
+     * @param employeeDTO
+     * @return
+     */
+    @ApiOperation("编辑员工信息")
+    @PutMapping
+    public Result compile(@RequestBody EmployeeDTO employeeDTO){
+        employeeService.compile(employeeDTO);
+        return Result.success();
+    }
 
 }
