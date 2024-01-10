@@ -1,16 +1,20 @@
 package com.sky.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,14 +65,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
-    @Override
     /**
      * 新增员工
      */
+    @Override
     public void newlyIncreased(EmployeeDTO employeeDTO) {
         //使用工具类拷贝相同字段
         Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
+        BeanUtils.copyProperties(employeeDTO, employee);
 
         //补全字段
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
@@ -81,4 +85,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.insert(employee);
     }
 
+    /**
+     * 员工分页查询
+     *
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pagingQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        //分页条件
+        Page<Employee> employeePage = new Page<>(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        //判断name是否为null
+        if (employeePageQueryDTO.getName() != null) {
+            //查询条件
+            LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
+            LambdaQueryWrapper<Employee> like = wrapper.like(Employee::getName, employeePageQueryDTO.getName());
+            //根据name模糊查询
+            Page<Employee> employeePage1 = employeeMapper.selectPage(employeePage, like);
+            return new PageResult(employeePage1.getTotal(), employeePage1.getRecords());
+        }
+        //查询所有并分页
+        Page<Employee> page = employeeMapper.selectPage(employeePage, new LambdaQueryWrapper<>());
+        return new PageResult(page.getTotal(), page.getRecords());
+    }
 }
