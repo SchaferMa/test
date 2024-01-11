@@ -1,9 +1,12 @@
 package com.sky.entity;
 
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,10 +18,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("dish")
 public class Dish implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     //菜品名称
@@ -38,13 +42,15 @@ public class Dish implements Serializable {
 
     //0 停售 1 起售
     private Integer status;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-
+    @TableField(fill = FieldFill.INSERT)
     private Long createUser;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
 }
