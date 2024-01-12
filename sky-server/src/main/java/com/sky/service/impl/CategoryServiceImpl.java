@@ -24,6 +24,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 〈功能简述〉<br>
  * 〈分类模块〉
@@ -105,6 +107,7 @@ public class CategoryServiceImpl implements CategoryService {
         return new PageResult(page.getTotal(), page.getRecords());
     }
 
+
     /**
      * 修改分类
      * @param categoryDTO
@@ -140,6 +143,19 @@ public class CategoryServiceImpl implements CategoryService {
         }
         categoryMapper.deleteById(id);
         return Result.success();
+    }
+
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    @Override
+    public Result selectList(Integer type) {
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Category::getType,type);
+        List<Category> list = categoryMapper.selectList(wrapper);
+        return Result.success(list);
     }
 
 

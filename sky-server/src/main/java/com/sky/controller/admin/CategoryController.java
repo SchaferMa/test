@@ -73,6 +73,17 @@ public class CategoryController {
     }
 
     /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    @ApiOperation("根据类型查询分类")
+    @GetMapping("/list")
+    public Result selectList(Integer type){
+        return categoryService.selectList(type);
+    }
+
+    /**
      * 修改分类
      * @param categoryDTO
      * @return

@@ -15,4 +15,6 @@ public interface CategoryService {
     void amend(CategoryDTO categoryDTO);
 
     Result delete(long id);
+
+    Result selectList(Integer type);
 }
